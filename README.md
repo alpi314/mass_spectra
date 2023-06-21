@@ -1,4 +1,11 @@
-### Mass Spectra
+# Mass Spectra
+
+## Purpose
+
+Create a pipeline that extracts various molecule fingerprints and their embeddings from mass spectra data.
+
+
+## General Information
 
 Articles:
 - https://jcheminf.biomedcentral.com/articles/10.1186/s13321-022-00636-1
@@ -27,3 +34,15 @@ Notes:
 Usage of CDK:
 - CDK is built in Java
 - We can use it in python with ```scyjava```
+- We need to install Java and Maven to use ```scyjava```
+- We can use ```scyjava``` to import classes from CDK
+- example: 
+```python 
+from scyjava import config, jimport
+config.endpoints.append('org.openscience.cdk:cdk-bundle:2.8')
+
+CircularFingerprinter = jimport('org.openscience.cdk.fingerprint.CircularFingerprinter')
+```
+
+Fingerprint selection:
+- https://mattermodeling.stackexchange.com/questions/1175/what-are-the-best-fingerprints-to-characterize-molecules (recommended MACCS, Circular, )

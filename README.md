@@ -12,6 +12,7 @@ Data:
 
 Software:
 - https://cdk.github.io/
+- CDK http://cdk.github.io/cdk/latest/docs/api/index.html
 - https://github.com/iomega/spec2vec
 
 Notes:

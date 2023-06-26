@@ -2,6 +2,7 @@ import argparse
 import logging
 import os
 import pickle
+import re
 
 from spec2vec import SpectrumDocument
 from spec2vec.model_building import train_new_word2vec_model
@@ -54,8 +55,17 @@ def load_from_mgf_files(directory, file_name_ending="", file_extension="mgf"):
         if filename.endswith(f"{file_name_ending}.{file_extension}"):
             yield from load_from_mgf(os.path.join(directory, filename))
 
+# Regex to extract information from title
+inchi_name = re.compile("InChiKey:\s*([A-Z\-]+).*Name: (.*)")
+
 # Preprocess the metadata
 def metadata_processing(s):
+    if s.metadata.get("title") and not s.metadata.get("inchikey"):
+        matched = inchi_name.findall(s.metadata.get("title"))
+        if len(matched) > 0:
+            inchikey, name = matched[0]
+            s.set("inchikey", inchikey)
+            s.set("compound_name", name)
     s = ms_filters.default_filters(s) # general metadata cleaning
     s = ms_filters.repair_inchi_inchikey_smiles(s) # fix wrongly formatted InChI, InChIKey, SMILES
     s = ms_filters.derive_inchi_from_smiles(s) # derive InChI from SMILES

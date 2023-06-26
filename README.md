@@ -48,7 +48,7 @@ Terminology:
 - spec2vec = embedding approach that utalizes word2vec to create embeddings from spectral data
 - precursor (ion) - ion which is the source of a fragmentation either spontaneous or induced by collisions. Also known as "mother ion".
 - m/z - M stands for mass and Z stands for charge number of ions. m/z is the mass-to-charge ratio. (Z is often 1, so m/z is often the same as mass.)
-- Tanimoto - similarity is a measure of similarity between two sets of data. It is a metric used to compare the similarity of two sets of data, and is often used in machine learning and data science.
+- Tanimoto similartiy - measure of similarity between two sets of data. It is a metric used to compare the similarity of two sets of data, and is often used in machine learning and data science.
 
 Usage of CDK:
 - CDK is built in Java

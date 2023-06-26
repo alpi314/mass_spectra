@@ -8,19 +8,13 @@ from spec2vec import SpectrumDocument
 from spec2vec.model_building import train_new_word2vec_model
 
 import matchms.filtering as ms_filters
-from matchms import metadata_utils
+from matchms import metadata_utils, set_matchms_logger_level
 from matchms.exporting import save_as_mgf
 from matchms.importing import load_from_mgf
 
 # Set logging level to "ERROR" to avoid distracting output during training
 metadata_utils.set_rdkit_log_level("rdApp.error")
-
-# Override logging settings in matchms
-logging.basicConfig(force=True)
-logging.getLogger().setLevel(logging.ERROR)
-loggers = [logging.getLogger(name) for name in logging.root.manager.loggerDict]
-for logger in loggers:
-    logger.setLevel(logging.ERROR)
+set_matchms_logger_level("ERROR") # set logging level to "ERROR" to avoid too many messages
 
 # Parse arguments
 parser = argparse.ArgumentParser(description='Train a spec2vec model on a dataset of spectra')

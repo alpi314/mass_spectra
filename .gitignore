@@ -6,3 +6,6 @@ gnps_spectra_libary.mgf
 
 # editor
 .vscode/
+
+# cache
+__pycache__/

@@ -14,9 +14,16 @@ Create a pipeline that extracts various molecule fingerprints and their embeddin
 - ```gnps_spectra_libary.mgf``` - contains the raw data used in spec2vec_playground.ipynb avaliable as [data](https://gnps-external.ucsd.edu/gnpslibrary/GNPS-NIH-NATURALPRODUCTSLIBRARY.mgf)
 - ```cdk_playground.ipynb``` - contains the code used to test the CDK library
 - ```spec2vec_playground.ipynb``` - contains the code used to test the spec2vec library
-- ```inchi_to_fingerprint.py``` - comand line tool that converts inchi to fingerprint
+- ```embed_spectra_playground.ipynb``` - contains the code used to test the embedding of spectra using fingerprints and spec2vec
+- ```cdk_inchi_to_fingerprint.py``` - comand line tool that converts inchi to fingerprint
+- ```spec2vec_train.py``` - comand line tool that trains spec2vec model
+- ```embed.ipynb``` - contains the code used to embed the dataset
 - ```requirements.txt``` - contains the required python libraries
 - ```requirements_conda.txt``` - contains the conda environment libraries
+
+### Pull Request Notes
+
+The project uses modified code of [matchms](https://github.com/matchms/matchms) from [this pull request](https://github.com/matchms/matchms/pull/447). The pull request enables logging level setting on rdkit's side so it is not necessary but it does cleanup the output of the project. The modified file is saved in ```matchms/``` folder.
 
 ## General Information
 

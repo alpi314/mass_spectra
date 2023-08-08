@@ -4,6 +4,9 @@ dataset/
 models/
 gnps_spectra_libary.mgf
 
+# embedding
+embeddings/
+
 # editor
 .vscode/
 

@@ -1,4 +1,5 @@
 import argparse
+from time import sleep
 
 from chembl_webresource_client.unichem import unichem_client as unichem
 from scyjava import config, jimport
@@ -37,6 +38,8 @@ FINGERPRINT_ARGS = {
 
 DEFAULT_PARSER = lambda x: x
 
+CONVERSION_RETRY_COUNT = 3
+CONVERSION_RETRY_DELAY = 1
 
 def generate_fingerprint(fingerprint_array, inchi_array, fingerprint_parser=DEFAULT_PARSER):
     fingerprints = {}
@@ -48,18 +51,34 @@ def generate_fingerprint(fingerprint_array, inchi_array, fingerprint_parser=DEFA
 
         fingerprinter = jimport(f'org.openscience.cdk.fingerprint.{fp}')
         fingerprinter = fingerprinter(*FINGERPRINT_ARGS.get(fp, {}))
-        for inchi in inchi_array:
-            atom_container = inchi_to_atom_container(f'{inchi}')
+        for inchi_idx, inchi in enumerate(inchi_array):
+            for i in range(CONVERSION_RETRY_COUNT):
+                try:
+                    atom_container = inchi_to_atom_container(f'{inchi}')
+                    if atom_container.getAtomCount() == 0:
+                        converted = inchikey_to_inchi(inchi)
+                        print(f'Converted InChI key {inchi} to {converted}')
+                        atom_container = inchi_to_atom_container(converted)
+                except Exception as e:
+                    print(f'Error Number {i} at idx {inchi_idx} converting InChI key {inchi}: {e}')
+                    sleep(CONVERSION_RETRY_DELAY)
+                    continue
+                break
+
             if atom_container.getAtomCount() == 0:
-                # retry with inchikey
-                atom_container = inchi_to_atom_container(inchikey_to_inchi(inchi))
-            if atom_container.getAtomCount() == 0:
-                raise ValueError(f'Invalid InChI key: {inchi}')
+                print(f'Cound not convert InChI key {inchi}...skipping')
+                fingerprints[f'{fp}'].append([None] * fingerprinter.getSize())
+                continue
             fingerprint = fingerprinter.getBitFingerprint(atom_container).asBitSet()
-            print(f'{inchi} {fp} {fingerprint_parser(fingerprint)}')
 
             fingerprints[f'{fp}'].append(fingerprint_parser(fingerprint))
     return fingerprints
+
+def java_bitset_to_python_array(bitSet):
+        bits = [0] * bitSet.size()
+        for i in bitSet.stream().toArray():
+            bits[i] = 1
+        return bits
     
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Optional app description')
@@ -87,14 +106,9 @@ if __name__ == '__main__':
     else:
         fingerprint_array = [args.Fingerprint]
 
-    def to_array(bitSet):
-        bits = [0] * bitSet.size()
-        for i in bitSet.stream().toArray():
-            bits[i] = 1
-        return bits
 
     if args.bit_array:
-        fingerprint_parser = to_array
+        fingerprint_parser = java_bitset_to_python_array
     else:
         fingerprint_parser = DEFAULT_PARSER
 

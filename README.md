@@ -10,7 +10,17 @@ Create a pipeline that extracts various molecule fingerprints and their embeddin
 Steps to reproduce basic usage of the project.
 - Copy dataset from [data](https://prod-dcd-datasets-cache-zipfiles.s3.eu-west-1.amazonaws.com/j3z5bmvmnd-6.zip) to ```dataset/``` folder
 - Create conda environment from ```requirements_conda.txt``` file or install required libraries from ```requirements.txt``` file into any python environment
-- 
+- Run 
+```bash
+python spec2vec_train.py ./dataset ./models/tbdms/spec2vec.models --preprocessed_dataset_folder ./dataset/tbdms_preprocessed/ --use_documents_pickle
+```
+to train spec2vec model on the TBDMS dataset
+- Run 
+```bash
+python spec2vec_train.py ./dataset ./models/tms/spec2vec.models --preprocessed_dataset_folder ./dataset/tms_preprocessed/ --use_documents_pickle
+```
+to train spec2vec model on the TMS dataset
+- Check ```embed.ipynb``` to see how to embed the dataset and adjust model save files if needed
 
 
 ## Project Structure

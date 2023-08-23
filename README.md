@@ -5,12 +5,19 @@
 Create a pipeline that extracts various molecule fingerprints and their embeddings from mass spectra data.
 
 
+## Base Usage
+
+Steps to reproduce basic usage of the project.
+- Copy dataset from [data](https://prod-dcd-datasets-cache-zipfiles.s3.eu-west-1.amazonaws.com/j3z5bmvmnd-6.zip) to ```dataset/``` folder
+- Create conda environment from ```requirements_conda.txt``` file or install required libraries from ```requirements.txt``` file into any python environment
+- 
+
+
 ## Project Structure
 
 - ```temp/``` - contains temporary files that were created on playgrounds as examples
 - ```dataset/``` - contains the dataset used in the project avaliable as [data](https://data.mendeley.com/datasets/j3z5bmvmnd/6)
 - ```models/``` - contains pretrained models used for examples (NOTE: file endings for some models must not be changed!)
-- ```matchms/``` - modified file from [matchms](https://github.com/matchms/matchms), saved as reference if pull request is not accepted
 - ```gnps_spectra_libary.mgf``` - contains the raw data used in spec2vec_playground.ipynb avaliable as [data](https://gnps-external.ucsd.edu/gnpslibrary/GNPS-NIH-NATURALPRODUCTSLIBRARY.mgf)
 - ```cdk_playground.ipynb``` - contains the code used to test the CDK library
 - ```spec2vec_playground.ipynb``` - contains the code used to test the spec2vec library
@@ -20,10 +27,6 @@ Create a pipeline that extracts various molecule fingerprints and their embeddin
 - ```embed.ipynb``` - contains the code used to embed the dataset
 - ```requirements.txt``` - contains the required python libraries
 - ```requirements_conda.txt``` - contains the conda environment libraries
-
-### Pull Request Notes
-
-The project uses modified code of [matchms](https://github.com/matchms/matchms) from [this pull request](https://github.com/matchms/matchms/pull/447). The pull request enables logging level setting on rdkit's side so it is not necessary but it does cleanup the output of the project. The modified file is saved in ```matchms/``` folder.
 
 ## General Information
 

@@ -10,7 +10,7 @@ Create a pipeline that extracts various molecule fingerprints and their embeddin
 Steps to reproduce basic usage of the project.
 - Copy and unzip dataset from [data](https://prod-dcd-datasets-cache-zipfiles.s3.eu-west-1.amazonaws.com/j3z5bmvmnd-6.zip) to ```dataset/``` folder
 - Install conda for enviorment setup
-- Create conda environment from ```requirements_conda.txt``` file (there might be some unresolved dependancies since they won't be found in conda installer)
+- Create conda environment from ```conda_env.txt``` file (there might be some unresolved dependancies since they won't be found in conda installer)
 - Activate conda environment
 - Use ```pip install -r requirements.txt``` to install the remaining dependancies
 - Run 

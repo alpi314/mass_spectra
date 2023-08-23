@@ -4,16 +4,16 @@ import os
 import pickle
 import re
 
+import matchms.filtering as ms_filters
+from matchms.exporting import save_as_mgf
+from matchms.importing import load_from_mgf
+from matchms.logging_functions import (set_matchms_logger_level,
+                                       set_rdkit_logger_level)
 from spec2vec import SpectrumDocument
 from spec2vec.model_building import train_new_word2vec_model
 
-import matchms.filtering as ms_filters
-from matchms import metadata_utils, set_matchms_logger_level
-from matchms.exporting import save_as_mgf
-from matchms.importing import load_from_mgf
-
 # Set logging level to "ERROR" to avoid distracting output during training
-metadata_utils.set_rdkit_log_level("rdApp.error")
+set_rdkit_logger_level("rdApp.error")
 set_matchms_logger_level("ERROR") # set logging level to "ERROR" to avoid too many messages
 
 # Load all spectra from the any file that ends with ".mgf" in the given directory

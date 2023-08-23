@@ -1,3 +1,6 @@
-matchms==0.20.0
+matchms==0.22.0
 scyjava==1.9.0
 spec2vec==0.8.0
+openpyxl==3.1.2
+PyYAML==6.0.1
+chembl-webresource-client==0.10.8

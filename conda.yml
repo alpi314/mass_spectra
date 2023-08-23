@@ -1,4 +1,4 @@
-name: ijs
+name: ijs_fresh
 channels:
   - conda-forge
   - defaults
@@ -155,4 +155,4 @@ dependencies:
       - websocket-client==1.6.0
       - widgetsnbextension==4.0.7
       - wrapt==1.15.0
-prefix: C:\Users\aleks\anaconda3\envs\ijs
+prefix: C:\Users\aleks\anaconda3\envs\ijs_fresh

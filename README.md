@@ -89,3 +89,9 @@ Fingerprint selection:
 Questions and considerations:
 - Dataset does not include the precursor ion mass, how can we find it, is it important?
 - Dataset only includes InChiKey, how can we use it to find the InChi representation of the molecule?
+
+## Future work
+- fingerprint feature name
+- spec2vec to fingerprint prediction
+- pubcem pipeline
+- reverse fingerprint to spec2vec

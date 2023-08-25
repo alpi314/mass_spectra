@@ -47,10 +47,18 @@ def metadata_processing(s):
 
 # Preprocess the peaks
 def peak_processing(s):
-    s = ms_filters.default_filters(s) # general peak cleaning
-    s = ms_filters.normalize_intensities(s) # normalize peak intensities to values between 0 and 1
-    s = ms_filters.select_by_intensity(s, intensity_from=0.01) # remove peaks below 0.01 after normalization
-    s = ms_filters.select_by_mz(s, mz_from=10, mz_to=1000) # remove peaks outside m/z range 10 to 1000
+    s = ms_filters.default_filters(s)
+    s = ms_filters.add_parent_mass(s)
+    s = ms_filters.normalize_intensities(s)
+    s = ms_filters.reduce_to_number_of_peaks(s, n_required=10, n_max=500)
+    s = ms_filters.select_by_mz(s, mz_from=0, mz_to=1000)
+    s = ms_filters.add_losses(s, loss_mz_from=10.0, loss_mz_to=200.0)
+    s = ms_filters.require_minimum_number_of_peaks(s, n_required=10)
+
+    # s = ms_filters.default_filters(s) # general peak cleaning
+    # s = ms_filters.normalize_intensities(s) # normalize peak intensities to values between 0 and 1
+    # s = ms_filters.select_by_intensity(s, intensity_from=0.01) # remove peaks below 0.01 after normalization
+    # s = ms_filters.select_by_mz(s, mz_from=10, mz_to=1000) # remove peaks outside m/z range 10 to 1000
     return s
 
 # Preprocessing pipeline
@@ -82,6 +90,8 @@ if __name__ == "__main__":
                         help='File name ending to filter files by')
     parser.add_argument('--preprocessed_dataset_folder', type=str, default="preprocessed",
                         help='Path to the preprocessed dataset folder')
+    parser.add_argument('--use_preprocessed_dataset', action='store_true',
+                        help='Use the preprocessed dataset if it exists')
     parser.add_argument('--use_documents_pickle', action='store_true',
                         help='Use the documents pickle file if it exists')
 
@@ -93,6 +103,7 @@ if __name__ == "__main__":
     EPOCHS = args.epochs
     FILE_NAME_ENDING = args.file_name_ending
     PREPROCESSED_DATASET_FOLDER = args.preprocessed_dataset_folder
+    USE_PREPROCESSED_DATASET = args.use_preprocessed_dataset
     USE_DOCUMENTS_PICKLE = args.use_documents_pickle
 
 
@@ -100,7 +111,7 @@ if __name__ == "__main__":
     os.makedirs(PREPROCESSED_DATASET_FOLDER, exist_ok=True)
 
     # Load the spectra from the dataset folder and preprocess them
-    data_already_preprocessed = os.path.isdir(PREPROCESSED_DATASET_FOLDER) and len(os.listdir(PREPROCESSED_DATASET_FOLDER)) > 0
+    data_already_preprocessed = USE_PREPROCESSED_DATASET and os.path.isdir(PREPROCESSED_DATASET_FOLDER) and len(os.listdir(PREPROCESSED_DATASET_FOLDER)) > 0
     if not data_already_preprocessed:
         spectrums = load_from_mgf_files(DATASET_FOLDER, file_name_ending=FILE_NAME_ENDING)
         print("Using data from dataset")

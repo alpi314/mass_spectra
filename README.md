@@ -15,12 +15,12 @@ Steps to reproduce basic usage of the project.
 - Use ```pip install -r requirements.txt``` to install the remaining dependancies
 - Run 
 ```bash
-python spec2vec_train.py ./dataset ./models/tbdms/ --file_name_ending TBDMS_RAW --preprocessed_dataset_folder ./dataset/tbdms_preprocessed/ --use_documents_pickle
+python spec2vec_train.py ./dataset ./models/tbdms/ --file_name_ending TBDMS_RAW --preprocessed_dataset_folder ./dataset/tbdms_preprocessed/
 ```
 to train spec2vec model on the TBDMS dataset
 - Run 
 ```bash
-python spec2vec_train.py ./dataset ./models/tms/ --file_name_ending TMS_RAW --preprocessed_dataset_folder ./dataset/tms_preprocessed/ --use_documents_pickle
+python spec2vec_train.py ./dataset ./models/tms/ --file_name_ending TMS_RAW --preprocessed_dataset_folder ./dataset/tms_preprocessed/
 ```
 to train spec2vec model on the TMS dataset
 - Check ```embed.ipynb``` to see how to embed the dataset and adjust model save files if needed

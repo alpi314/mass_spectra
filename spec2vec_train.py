@@ -1,5 +1,6 @@
 import argparse
 import logging
+import multiprocessing
 import os
 import pickle
 import re
@@ -94,6 +95,8 @@ if __name__ == "__main__":
                         help='Use the preprocessed dataset if it exists')
     parser.add_argument('--use_documents_pickle', action='store_true',
                         help='Use the documents pickle file if it exists')
+    parser.add_argument('--workers', type=int, default=multiprocessing.cpu_count(),
+                        help='Number of workers to use for training (default: number of CPUs)')
 
     args = parser.parse_args()
 
@@ -105,7 +108,7 @@ if __name__ == "__main__":
     PREPROCESSED_DATASET_FOLDER = args.preprocessed_dataset_folder
     USE_PREPROCESSED_DATASET = args.use_preprocessed_dataset
     USE_DOCUMENTS_PICKLE = args.use_documents_pickle
-
+    WORKERS = args.workers
 
     # Create the preprocessed dataset folder if it doesn't exist
     os.makedirs(PREPROCESSED_DATASET_FOLDER, exist_ok=True)
@@ -132,7 +135,7 @@ if __name__ == "__main__":
 
     # Train the model 
     print(f"Training model with {EPOCHS} epochs on {len(documents)} documents")
-    model = train_new_word2vec_model(documents, iterations=EPOCHS, workers=2, progress_logger=True)
+    model = train_new_word2vec_model(documents, iterations=EPOCHS, workers=WORKERS, progress_logger=True)
 
     # Save the model
     os.makedirs(os.path.dirname(MODEL_SAVE_FILE), exist_ok=True)

@@ -36,7 +36,6 @@ tms_embedding = []
 for spectra in tms_spectra_documents:
     title = spectra.metadata.get('title')
     inchikey = spectra.metadata.get('inchikey')
-    # embedding = tms_model._calculate_embedding(spectra)
     embedding = calc_vector(tms_model.model, spectra)
     tms_embedding.append((title, inchikey, *embedding))
 

@@ -76,6 +76,8 @@ if __name__ == "__main__":
                         help='Path to the dataset folder')
     parser.add_argument('model_save_file', type=str,
                         help='Path to where the model will be saved')
+    parser.add_argument('--epochs', type=int, default=10,
+                        help='Number of epochs to train the model for (default: 10)')
     parser.add_argument('--file_name_ending', type=str, default="TBDMS_RAW",
                         help='File name ending to filter files by')
     parser.add_argument('--preprocessed_dataset_folder', type=str, default="preprocessed",
@@ -88,6 +90,7 @@ if __name__ == "__main__":
     # Assign arguments to variables
     DATASET_FOLDER = args.dataset_folder
     MODEL_SAVE_FILE = args.model_save_file
+    EPOCHS = args.epochs
     FILE_NAME_ENDING = args.file_name_ending
     PREPROCESSED_DATASET_FOLDER = args.preprocessed_dataset_folder
     USE_DOCUMENTS_PICKLE = args.use_documents_pickle
@@ -117,20 +120,19 @@ if __name__ == "__main__":
         print("Using newly created documents")
 
     # Train the model 
-    iterations = 10
-    print(f"Training model with {iterations} iterations on {len(documents)} documents")
-    model = train_new_word2vec_model(documents, iterations=iterations, workers=2, progress_logger=True)
+    print(f"Training model with {EPOCHS} epochs on {len(documents)} documents")
+    model = train_new_word2vec_model(documents, iterations=EPOCHS, workers=2, progress_logger=True)
 
     # Save the model
     os.makedirs(os.path.dirname(MODEL_SAVE_FILE), exist_ok=True)
     if not os.path.isfile(MODEL_SAVE_FILE):
-        MODEL_SAVE_FILE = f'{MODEL_SAVE_FILE}/spec2vec.model'
+        MODEL_SAVE_FILE = os.path.join(MODEL_SAVE_FILE, "spec2vec.model")
     model.save(MODEL_SAVE_FILE)
     print("Model saved to", MODEL_SAVE_FILE)
 
     # Save the spectra as MGF files
     if not data_already_preprocessed:
-        save_as_mgf(spectrums, os.path.join(PREPROCESSED_DATASET_FOLDER, f"preprocessed.mgf"))
+        save_as_mgf(spectrums, os.path.join(PREPROCESSED_DATASET_FOLDER, "preprocessed.mgf"))
 
     # Save documents with pickle
     with open(os.path.join(PREPROCESSED_DATASET_FOLDER, "documents.pickle"), "wb") as f:

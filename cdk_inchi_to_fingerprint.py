@@ -43,8 +43,10 @@ CONVERSION_RETRY_DELAY = 1
 
 def generate_fingerprint(fingerprint_array, inchi_array, fingerprint_parser=DEFAULT_PARSER):
     fingerprints = {}
+    fingerprints_invalid_inchi_idx = {}
     for fp in fingerprint_array:
         fingerprints[f'{fp}'] = []
+        fingerprints_invalid_inchi_idx[f'{fp}'] = []
 
         if fp not in AVAILABLE_FINGERPRINTS:
             raise ValueError(f'Fingerprint type {fp} not available. Options are: {AVAILABLE_FINGERPRINTS}')
@@ -68,11 +70,12 @@ def generate_fingerprint(fingerprint_array, inchi_array, fingerprint_parser=DEFA
             if atom_container.getAtomCount() == 0:
                 print(f'Cound not convert InChI key {inchi}...skipping')
                 fingerprints[f'{fp}'].append([None] * fingerprinter.getSize())
+                fingerprints_invalid_inchi_idx[f'{fp}'].append(inchi_idx)
                 continue
             fingerprint = fingerprinter.getBitFingerprint(atom_container).asBitSet()
 
-            fingerprints[f'{fp}'].append(fingerprint_parser(fingerprint))
-    return fingerprints
+            fingerprints[f'{fp}'].append(fingerprint_parser(fingerprint))        
+    return fingerprints, fingerprints_invalid_inchi_idx
 
 def java_bitset_to_python_array(bitSet):
         bits = [0] * bitSet.size()
@@ -113,6 +116,7 @@ if __name__ == '__main__':
         fingerprint_parser = DEFAULT_PARSER
 
     try:
-        generate_fingerprint(fingerprint_array, inchi_array, fingerprint_parser)
+        fingerprints, _ = generate_fingerprint(fingerprint_array, inchi_array, fingerprint_parser)
+        print(fingerprints)
     except ValueError as e:
         parser.error(e)

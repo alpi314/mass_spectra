@@ -117,6 +117,5 @@ if __name__ == '__main__':
 
     try:
         fingerprints, _ = generate_fingerprint(fingerprint_array, inchi_array, fingerprint_parser)
-        print(fingerprints)
     except ValueError as e:
         parser.error(e)

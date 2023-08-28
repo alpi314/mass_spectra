@@ -36,17 +36,13 @@ FINGERPRINT_ARGS = {
     'PubchemFingerprinter': [DefaultChemObjectBuilder.getInstance()]
 }
 
-DEFAULT_PARSER = lambda x: x
-
 CONVERSION_RETRY_COUNT = 3
 CONVERSION_RETRY_DELAY = 1
 
-def generate_fingerprint(fingerprint_array, inchi_array, fingerprint_parser=DEFAULT_PARSER):
+def generate_fingerprint(fingerprint_array, inchi_array):
     fingerprints = {}
-    fingerprints_invalid_inchi_idx = {}
     for fp in fingerprint_array:
         fingerprints[f'{fp}'] = []
-        fingerprints_invalid_inchi_idx[f'{fp}'] = []
 
         if fp not in AVAILABLE_FINGERPRINTS:
             raise ValueError(f'Fingerprint type {fp} not available. Options are: {AVAILABLE_FINGERPRINTS}')
@@ -70,12 +66,13 @@ def generate_fingerprint(fingerprint_array, inchi_array, fingerprint_parser=DEFA
             if atom_container.getAtomCount() == 0:
                 print(f'Cound not convert InChI key {inchi}...skipping')
                 fingerprints[f'{fp}'].append([None] * fingerprinter.getSize())
-                fingerprints_invalid_inchi_idx[f'{fp}'].append(inchi_idx)
                 continue
             fingerprint = fingerprinter.getBitFingerprint(atom_container).asBitSet()
+            fingerprint = java_bitset_to_python_array(fingerprint)
+            fingerprint = fingerprint[:fingerprinter.getSize()]
 
-            fingerprints[f'{fp}'].append(fingerprint_parser(fingerprint))        
-    return fingerprints, fingerprints_invalid_inchi_idx
+            fingerprints[f'{fp}'].append(fingerprint)        
+    return fingerprints
 
 def java_bitset_to_python_array(bitSet):
         bits = [0] * bitSet.size()
@@ -94,8 +91,6 @@ if __name__ == '__main__':
                         help='Accept array of InChI keys separated by commas')
     parser.add_argument('--fingerprint_array', action='store_true',
                         help='Accept array of fingerprint types separated by commas')
-    parser.add_argument('--bit_array', action='store_true',
-                        help='Return fingerprint as array of bits instead of BitSet')
 
     args = parser.parse_args()
 
@@ -109,13 +104,7 @@ if __name__ == '__main__':
     else:
         fingerprint_array = [args.Fingerprint]
 
-
-    if args.bit_array:
-        fingerprint_parser = java_bitset_to_python_array
-    else:
-        fingerprint_parser = DEFAULT_PARSER
-
     try:
-        fingerprints, _ = generate_fingerprint(fingerprint_array, inchi_array, fingerprint_parser)
+        fingerprints = generate_fingerprint(fingerprint_array, inchi_array)
     except ValueError as e:
         parser.error(e)

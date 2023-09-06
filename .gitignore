@@ -1,14 +1,8 @@
-# data
-temp/
-dataset/
-models/
-gnps_spectra_libary.mgf
-
-# embedding
-embeddings/
-
 # editor
 .vscode/
 
 # cache
 __pycache__/
+
+# source files
+source/*/

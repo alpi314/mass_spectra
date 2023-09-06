@@ -4,9 +4,9 @@ import gensim
 import pandas as pd
 from spec2vec import Spec2Vec, calc_vector
 
-from spec2vec_train import preprocess_file
+from mass_spectra.train_spec2vec import preprocess_file
 
-parser = argparse.ArgumentParser(description='Embed spectra using spec2vec trained model')
+parser = argparse.ArgumentParser(description='Embed spectra using spec2vec model')
 
 parser.add_argument('data_file', type=str,
                     help='Path to the data file')

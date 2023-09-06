@@ -8,6 +8,7 @@ Create a pipeline that extracts various molecule fingerprints and their embeddin
 ## Usage
 
 1. Install
+- Install Maven (needed for ```scyjava``` python package) ([install guide](https://maven.apache.org/install.html)) and add it to PATH
 - Install conda ([install guide](https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html))
 - Run ```conda env create -f conda.yml --name mass_spectra``` to create conda environment called ```mass_spectra``` (note there might be some non fatal errors for some packages)
 - Run ```conda activate mass_spectra``` to activate the environment

@@ -1,3 +1,6 @@
+# This script converts a csv file to an arff file
+# arff is a file format used by Weka and some other machine learning software
+
 import argparse
 import os
 

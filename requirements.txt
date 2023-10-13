@@ -9,7 +9,7 @@ backcall @ file:///home/conda/feedstock_root/build_artifacts/backcall_1592338393
 backports.functools-lru-cache @ file:///home/conda/feedstock_root/build_artifacts/backports.functools_lru_cache_1618230623929/work
 beautifulsoup4==4.12.2
 bleach==6.0.0
-certifi==2023.7.22
+certifi==2023.5.7
 cffi==1.15.1
 charset-normalizer==3.1.0
 chembl-webresource-client==0.10.8
@@ -82,7 +82,7 @@ pandocfilters==1.5.0
 parso @ file:///home/conda/feedstock_root/build_artifacts/parso_1638334955874/work
 pickleshare @ file:///home/conda/feedstock_root/build_artifacts/pickleshare_1602536217715/work
 pickydict==0.4.0
-Pillow==9.5.0
+Pillow==10.0.1
 platformdirs @ file:///home/conda/feedstock_root/build_artifacts/platformdirs_1687097136512/work
 pluggy==1.2.0
 prometheus-client==0.17.0
@@ -134,7 +134,7 @@ typing_extensions @ file:///home/conda/feedstock_root/build_artifacts/typing_ext
 tzdata==2023.3
 uri-template==1.3.0
 url-normalize==1.4.3
-urllib3==2.0.3
+urllib3==2.0.6
 wcwidth @ file:///home/conda/feedstock_root/build_artifacts/wcwidth_1673864653149/work
 webcolors==1.13
 webencodings==0.5.1

@@ -48,18 +48,19 @@ def metadata_processing(s):
 
 # Preprocess the peaks
 def peak_processing(s):
-    s = ms_filters.default_filters(s)
     s = ms_filters.add_parent_mass(s)
     s = ms_filters.normalize_intensities(s)
-    s = ms_filters.reduce_to_number_of_peaks(s, n_required=10, n_max=500)
     s = ms_filters.select_by_mz(s, mz_from=0, mz_to=1000)
-    s = ms_filters.add_losses(s, loss_mz_from=10.0, loss_mz_to=200.0)
     s = ms_filters.require_minimum_number_of_peaks(s, n_required=10)
+    s = ms_filters.reduce_to_number_of_peaks(s, n_required=10)
 
-    # s = ms_filters.default_filters(s) # general peak cleaning
-    # s = ms_filters.normalize_intensities(s) # normalize peak intensities to values between 0 and 1
-    # s = ms_filters.select_by_intensity(s, intensity_from=0.01) # remove peaks below 0.01 after normalization
-    # s = ms_filters.select_by_mz(s, mz_from=10, mz_to=1000) # remove peaks outside m/z range 10 to 1000
+    if s is None:
+        return None
+    s_remove_low_peaks = ms_filters.select_by_relative_intensity(s, intensity_from=0.001)
+    if len(s_remove_low_peaks.peaks) >= 10:
+        s = s_remove_low_peaks
+
+    s = ms_filters.add_losses(s, loss_mz_from=5.0, loss_mz_to=200.0)
     return s
 
 # Preprocessing pipeline

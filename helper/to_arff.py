@@ -36,7 +36,7 @@ metadata_columns = list(df.columns[df.dtypes == 'object'])
 sanitized_metadata_columns = {}
 for col in metadata_columns:
     df[col] = df[col].astype(str)
-    df[col] = df[col].str.strip()
+    df[col] = df[col].str.strip().replace(',', '_')
     sanitized_metadata_columns[col] = col.lower().replace(' ', '_')
 df = df.rename(columns=sanitized_metadata_columns)
 

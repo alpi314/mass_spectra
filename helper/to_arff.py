@@ -36,11 +36,12 @@ metadata_columns = list(df.columns[df.dtypes == 'object'])
 sanitized_metadata_columns = {}
 for col in metadata_columns:
     df[col] = df[col].astype(str)
-    df[col] = df[col].str.strip().replace(',', '_')
+    # df[col] = df[col].str.strip().str.replace(',', ';')
+    df[col] = df[col].str.strip()
     sanitized_metadata_columns[col] = col.lower().replace(' ', '_')
 df = df.rename(columns=sanitized_metadata_columns)
 
-numeric_columns = df.columns[df.dtypes != 'object']
+numeric_columns = list(df.columns[df.dtypes != 'object'])
 binary = set([0, 1])
 for col in numeric_columns:
     vc = df[col].value_counts()
@@ -49,3 +50,10 @@ for col in numeric_columns:
         df[col] = df[col].astype(bool)
 
 arff.dump(ARFF_FILE, df.values, relation=RELATION, names=df.columns)
+
+with open(ARFF_FILE, 'r') as f:
+    data = f.read()
+    data = data.replace("'", '"')
+
+with open(ARFF_FILE, 'w') as f:
+    f.write(data)

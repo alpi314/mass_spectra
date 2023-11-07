@@ -2,10 +2,10 @@ from catboost import CatBoostClassifier, Pool
 
 
 class CatBoost():
-    def __init__(self, iterations):
+    def __init__(self, **kwargs):
         self.clf = CatBoostClassifier(
             loss_function='MultiLogloss',
-            iterations=iterations,
+            **kwargs
         )
 
     def fit(self, X, y):

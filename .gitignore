@@ -6,3 +6,6 @@ __pycache__/
 
 # source files
 source/*/
+
+# training info
+catboost_info/

@@ -1,6 +1,7 @@
 import argparse
 from time import sleep
 
+import pandas as pd
 from chembl_webresource_client.unichem import unichem_client as unichem
 from scyjava import config, jimport
 
@@ -27,9 +28,9 @@ AVAILABLE_FINGERPRINTS = [
     'EStateFingerprinter',
     'ExtendedFingerprinter',
     'KlekotaRothFingerprinter',
-    'LingoFingerprinter',
     'MACCSFingerprinter',
-    'PubchemFingerprinter'
+    'PubchemFingerprinter',
+    'SubstructureFingerprinter'
 ]
 
 FINGERPRINT_ARGS = {
@@ -42,13 +43,15 @@ CONVERSION_RETRY_DELAY = 1
 def generate_fingerprint(fingerprint_array, inchi_array):
     fingerprints = {}
     for fp in fingerprint_array:
-        fingerprints[f'{fp}'] = []
-
+        print(f'Generating {fp} fingerprint')
         if fp not in AVAILABLE_FINGERPRINTS:
             raise ValueError(f'Fingerprint type {fp} not available. Options are: {AVAILABLE_FINGERPRINTS}')
 
         fingerprinter = jimport(f'org.openscience.cdk.fingerprint.{fp}')
         fingerprinter = fingerprinter(*FINGERPRINT_ARGS.get(fp, {}))
+
+        fingerprints[f'{fp}'] = pd.DataFrame(columns=['inchi'] + [f'bit_{i}' for i in range(fingerprinter.getSize())])
+        print(f'Converting {len(inchi_array)} InChI keys to {fingerprinter.getSize()} bit {fp} fingerprint')
         for inchi_idx, inchi in enumerate(inchi_array):
             for i in range(CONVERSION_RETRY_COUNT):
                 try:
@@ -65,13 +68,12 @@ def generate_fingerprint(fingerprint_array, inchi_array):
 
             if atom_container.getAtomCount() == 0:
                 print(f'Cound not convert InChI key {inchi}...skipping')
-                fingerprints[f'{fp}'].append([None] * fingerprinter.getSize())
                 continue
             fingerprint = fingerprinter.getBitFingerprint(atom_container).asBitSet()
             fingerprint = java_bitset_to_python_array(fingerprint)
             fingerprint = fingerprint[:fingerprinter.getSize()]
 
-            fingerprints[f'{fp}'].append(fingerprint)        
+            fingerprints[f'{fp}'].loc[inchi_idx] = [inchi] + fingerprint     
     return fingerprints
 
 def java_bitset_to_python_array(bitSet):

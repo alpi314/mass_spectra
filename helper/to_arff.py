@@ -14,12 +14,15 @@ parser.add_argument('arff_file', type=str,
                     help='Path to the arff file')
 parser.add_argument('--relation', type=str, default=None,
                     help='Relation name (if not specified, will be the arf file name)')
+parser.add_argument('--shuffle', action='store_true',
+                    help='Shuffle the rows')
 
 args = parser.parse_args()
 
 CSV_FILE = args.csv_file
 ARFF_FILE = args.arff_file
 RELATION = args.relation
+SHUFFLE = args.shuffle
 
 if not CSV_FILE.endswith('.csv'):
     raise argparse.ArgumentError('CSV file must be a csv file')
@@ -31,6 +34,9 @@ if RELATION is None:
     RELATION = os.path.basename(ARFF_FILE).replace('.arff', '')
 
 df = pd.read_csv(CSV_FILE)
+
+if SHUFFLE:
+    df = df.sample(frac=1)
 
 metadata_columns = list(df.columns[df.dtypes == 'object'])
 sanitized_metadata_columns = {}
@@ -50,3 +56,12 @@ for col in numeric_columns:
         df[col] = df[col].astype(bool)
 
 arff.dump(ARFF_FILE, df.values, relation=RELATION, names=df.columns)
+
+with open(ARFF_FILE, 'r') as f:
+    data = f.read()
+    data = data.replace('{True, False}', '{0, 1}')
+    data = data.replace(',True', ',1')
+    data = data.replace(',False', ',0')
+
+with open(ARFF_FILE, 'w') as f:
+    f.write(data)

@@ -64,15 +64,17 @@ def peak_processing(s):
     return s
 
 # Preprocessing pipeline
-def preprocess(s):
+def preprocess(s, convert_to_document=True):
     s = metadata_processing(s)
     s = peak_processing(s)
+    if not convert_to_document:
+        return s
     return convert_to_document(s)
 
 # Preprocess pipeline for the file
-def preprocess_file(file_path):
+def preprocess_file(file_path, convert_to_document=True):
     spectrums = load_from_mgf(file_path)
-    return [preprocess(s) for s in spectrums]
+    return [preprocess(s, convert_to_document) for s in spectrums]
 
 # Convert the spectra to SpectrumDocuments
 def convert_to_document(s):

@@ -9,3 +9,8 @@ source/*/
 
 # training info
 catboost_info/
+
+# general files
+*.xlsx
+*.mgf
+*.msp

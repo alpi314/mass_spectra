@@ -1,5 +1,9 @@
 # Mass Spectra
 
+## Article
+
+https://aile3.ijs.si/dunja/SiKDD2023/Papers/IS_2023_-_SIKDD_paper_11.pdf
+
 ## Purpose
 
 Create a pipeline that extracts various molecule fingerprints and their embeddings from mass spectra data. Then train ML models to predict the fingerprint from the embedding.
